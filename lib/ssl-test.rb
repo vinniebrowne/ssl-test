@@ -24,6 +24,7 @@ module SSLTest
       http.read_timeout = read_timeout
       http.use_ssl = true
       http.verify_mode = verify_mode == 'none' ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER
+
       http.verify_callback = -> (verify_ok, store_context) {
         cert = store_context.current_cert
         chain = store_context.chain
