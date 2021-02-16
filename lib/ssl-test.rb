@@ -13,7 +13,7 @@ module SSLTest
   VERSION = -"1.4.0"
 
   class << self
-    def test url, open_timeout: 5, read_timeout: 5, redirection_limit: 5
+    def test url, open_timeout: 5, read_timeout: 5, redirection_limit: 5, ca_file: '', verify_mode: 'peer'
       uri = URI.parse(url)
       return if uri.scheme != 'https'
       cert = failed_cert_reason = chain = nil
@@ -23,7 +23,7 @@ module SSLTest
       http.open_timeout = open_timeout
       http.read_timeout = read_timeout
       http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+      http.verify_mode = verify_mode == 'none' ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER
       http.verify_callback = -> (verify_ok, store_context) {
         cert = store_context.current_cert
         chain = store_context.chain
